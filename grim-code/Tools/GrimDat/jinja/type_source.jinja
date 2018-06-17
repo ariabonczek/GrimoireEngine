@@ -1,0 +1,21 @@
+{% import 'type_common.jinja' as common with context %}
+// Generated from GrimDat
+// grim{{ grimtype.name }}.cpp
+
+#include "generated_{{ grimtype.name }}.h"
+{% if grimtype.serializeable %}
+#include <Shared/Core/grimJson.h>
+#include <Shared/Core/Assert.h>
+
+{% endif %}
+{% if grimtype.namespace is not equalto "" %}
+namespace {{ grimtype.namespace }} {
+
+{% endif %}
+	{{ common.constructor(grimtype)|indent }}
+{% if grimtype.namespace is not equalto "" %}
+}
+
+{% endif %}
+
+{{ common.defineJsonFunctions(grimtype)}}

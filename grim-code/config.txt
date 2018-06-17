@@ -1,0 +1,35 @@
+{
+    "windowWidth":  1280,
+    "windowHeight": 720,
+	"windowTitle": "Bet you wish you had a cool skateboard",
+	"numDisplayBuffers": 2,
+	"displayBufferResolutionX": 1920,
+	"displayBufferResolutionY": 1080,
+
+	"renderSettings": {
+
+		"passes": [
+			{
+				"name": "ForwardGeometryDrawPass",
+				"module": "forwardLightGeo",
+				"targets": [
+					"framebuffer"
+				],
+				"depthTarget": "depth",
+				"depthState": {
+					"testEnabled": true,
+					"writeEnabled": true,
+					"depthFunc": "kLessEqual"
+				}
+			}
+		],
+		"resources": [
+			{
+				"name": "depth",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kDepth32"
+			}
+		]	
+	}
+}

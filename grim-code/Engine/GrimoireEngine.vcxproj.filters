@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Memory.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Filesystem.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineGlobals.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Gfx.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandContext.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="DXCommandContext.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="DXSurface.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="DXGfx.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="DXShader.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Buffer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="DXBuffer.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Fence.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="DXFence.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Precompiled.cpp" />
+    <ClCompile Include="View.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Clock.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="GfxDebug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GrimInputPC.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawElement.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicsState.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ForwardLighting.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="DXEnums.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderGraph.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Precompiled.h" />
+    <ClInclude Include="Memory.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Filesystem.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineGlobals.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Gfx.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandContext.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dx12.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="View.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="DXCommandContext.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="DXSurface.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="DXGfx.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="WinMem.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="DXShader.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsState.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Buffer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="DXBuffer.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Fence.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="DXFence.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="DXEnums.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMain.h" />
+    <ClInclude Include="Clock.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="GfxDebug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="GrimInput.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawElement.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ForwardLighting.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderGraph.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshElement.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\config.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{3c24990c-7a89-4756-894c-8ef454ceb579}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{1ca8bf54-075e-4a6f-866b-4d32c6522bba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering">
+      <UniqueIdentifier>{ac10313a-984a-47bc-a098-675efef829d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{f4c23c9d-dc4a-4e9b-a60b-79e4394d7624}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

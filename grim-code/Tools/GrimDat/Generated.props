@@ -1,0 +1,1 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"><ItemGroup /><ItemGroup><ClCompile Include="grimVector3.cpp" /><ClCompile Include="grimQuaternion.cpp" /><ClCompile Include="grimTransform.cpp" /><ClCompile Include="grimModel.cpp" /></ItemGroup></Project>

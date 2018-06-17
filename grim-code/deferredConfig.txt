@@ -1,0 +1,119 @@
+{
+    "windowWidth":  1280,
+    "windowHeight": 720,
+	"windowTitle": "Bet you wish you had a cool skateboard",
+	"numDisplayBuffers": 2,
+	"displayBufferResolutionX": 1920,
+	"displayBufferResolutionY": 1080,
+	"ram": 2097152,
+
+	"renderSettings": {
+
+		"passes": [
+			{
+				"name": "DepthPrePass",
+				"module": "depthOnly",
+				"depthTarget": "depth",
+				"depthState": {
+					"testEnabled": true,
+					"writeEnabled": true,
+					"depthFunc": "kLessEqual"
+				}
+			},
+			{
+				"name": "GBufferOpaquePass",
+				"module": "forwardGeo",
+				"targets": [
+					"albedo",
+					"normals",
+					"misc"
+				],
+				"depthTarget": "depth",
+				"depthState": {
+					"testEnabled": true,
+					"writeEnabled": false,
+					"depthFunc": "kEqual"
+				},
+				"dependsOn": [
+					"DepthPrePass"
+				]
+			},
+			{
+				"name": "LightTilingPass",
+				"module": "deferredLightTiling",
+				"outputs": [
+					"lightTileInfo"
+				]
+			},
+			{
+				"name": "LightingPass",
+				"module": "deferredLighting_compute",
+				"inputs": [
+					"lightTileInfo",
+					"albedo",
+					"normals",
+					"misc"
+				],
+				"outputs": [
+					"lit"
+				],
+				"dependsOn":[
+					"LightTilingPass",
+					"GBufferOpaquePass"
+				]
+			},
+			{
+				"name": "PostProcessing",
+				"module": "combinedPost",
+				"inputs": [
+					"lit"
+				],
+				"outputs": [
+					"frameBuffer"
+				],
+				"dependsOn": [
+					"Lighting Pass"
+				]
+			}
+		],
+
+		"resources": [
+			{
+				"name": "depth",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kDepth32"
+			},
+			{
+				"name": "albedo",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kRGBA8"
+			},
+			{
+				"name": "normals",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kR11G11B10"
+			},
+			{
+				"name": "misc",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kR11G11B10"
+			},
+			{
+				"name": "lightTileInfo",
+				"type": "buffer",
+				"bufferType": "rwbuffer",
+				"sizeCodeDriven": true
+			},
+			{
+				"name": "lit",
+				"type": "surface",
+				"useFrameRes": true,
+				"format": "kR11G11B10"
+			}
+		]
+	}
+}

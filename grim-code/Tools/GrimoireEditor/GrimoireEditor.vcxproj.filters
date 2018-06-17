@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="QGameWindow.cpp" />
+    <ClCompile Include="Precompiled.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="QGrimoireEditor.cpp" />
+    <ClCompile Include="QResourceBrowser.cpp" />
+    <ClCompile Include="QElementBrowser.cpp" />
+    <ClCompile Include="QElementEditor.cpp" />
+    <ClCompile Include="QDebugConsole.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="QGameWindow.h" />
+    <ClInclude Include="Precompiled.h" />
+    <ClInclude Include="QGrimoireEditor.h" />
+    <ClInclude Include="QResourceBrowser.h" />
+    <ClInclude Include="QElementBrowser.h" />
+    <ClInclude Include="QElementEditor.h" />
+    <ClInclude Include="QDebugConsole.h" />
+  </ItemGroup>
+</Project>

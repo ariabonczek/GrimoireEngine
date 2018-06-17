@@ -1,0 +1,43 @@
+{
+	"passes": [{
+		"name": "ForwardGeometryDrawPass",
+		"depthState": {
+			"testEnabled": true,
+			"writeEnabled": true,
+			"depthFunc": 4
+		},
+		"multisampleState": {
+			"count": 1,
+			"quality": 0
+		},
+		"blendState": [
+			{
+				"blendEnabled": false,
+				"srcColor": 2,
+				"destColor": 1,
+				"colorFunc": 1,
+				"srcAlpha": 2,
+				"destAlpha": 1,
+				"alphaFunc": 1
+			}
+		],
+		"rasterizerState": {
+			"fillMode": 3,
+			"cullMode": 3,
+			"counterClockwise": false
+		},
+		"primMode": 3,
+		"surfaceDefinitions": [
+			{
+				"width": 1920,
+				"height": 1080,
+				"format": "kRGBA8"
+			}
+		],
+		"depthSurfaceDefinition": {
+			"width": 1920,
+			"height": 1080,
+			"format": "kDepth32"
+		}
+	}]
+}

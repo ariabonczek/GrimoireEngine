@@ -1,0 +1,31 @@
+{% import 'type_common.jinja' as common with context %}
+#pragma once
+// Generated from GrimDat
+// grim{{ grimtype.name }}.h
+
+{% for header in grimtype.headers %}
+#include "{{header}}"
+{% endfor %}
+{% if grimtype.serializeable %}
+#include <Shared/Core/grimJson.h>
+{% endif %}
+{% if grimtype.namespace is not equalto "" %}
+namespace {{ grimtype.namespace }} 
+{
+{% endif %}
+
+{{ grimtype.typeSpecifier }} t{{ grimtype.name }}
+{
+public:
+	t{{ grimtype.name }}();
+
+	{{ common.enumDeclarations(grimtype)|indent }}
+{% for attribute in grimtype.allAttributes %}
+	{{ common.writeAttributes(attribute) }}
+{% endfor %}
+};
+{% if grimtype.namespace is not equalto "" %}
+}
+{% endif %}
+
+{{ common.declareJsonFunctions(grimtype) }}

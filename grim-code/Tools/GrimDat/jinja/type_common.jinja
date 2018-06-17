@@ -1,0 +1,94 @@
+{% macro cppNamespace(grimType) -%}
+{% if grimtype.namespace is not equalto "" -%}
+{{grimtype.namespace}}::
+{%- endif %}
+{%- endmacro %}
+
+{% macro writeAttributes(attribute) -%}
+{{ attribute.type }} {{ attribute.name }};
+{%- endmacro %}
+
+{% macro initDefault(attribute, comma) %}
+	{% if comma %},{% endif %}{{attribute.name}}({{attribute.default}}) 
+{% endmacro %}
+
+{% macro constructor(grimType) %}
+t{{ grimtype.name }}::t{{ grimtype.name}}(){% if grimtype.anyDefaults %}: 
+{% endif %} 
+{%- set ns = namespace() -%}
+{%- set ns.inputcomma = False -%}
+{% for attribute in grimType.allAttributes %}
+{% if attribute.default is not equalto None -%}
+	{{initDefault(attribute, ns.inputcomma)}}
+	{%- set ns.inputcomma = True -%}
+{%- endif %}
+{% endfor %}
+{}
+{% endmacro %}
+
+{% macro declareJsonFunctions(grimtype) %}
+{% if grimtype.serializeable %}	
+namespace grimJson
+{ 
+{% for enum in grimtype.enums %}
+	bool serializeToJSON( const {{ cppNamespace(grimtype) }}t{{ grimtype.name }}::e{{ enum.name }}& self, JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON({{ cppNamespace(grimtype) }}t{{ grimtype.name }}::e{{ enum.name }}& self, const JsonValue& value, JsonAllocator& allocator);
+
+{% endfor %}
+	bool serializeToJSON(const {{cppNamespace(grimtype) }}t{{grimtype.name}}& self, JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON({{cppNamespace(grimtype) }}t{{grimtype.name}}& self, const JsonValue& value, JsonAllocator& allocator);
+}
+{% endif %}
+{% endmacro %}
+
+{% macro defineJsonFunctions(grimtype) %}
+{% if grimtype.serializeable %}
+{% for enum in grimtype.enums %}
+bool grimJson::serializeToJSON( const {{ cppNamespace(grimtype) }}t{{ grimtype.name }}::e{{ enum.name }}& self, JsonValue& value, JsonAllocator& allocator)
+{
+	value.SetInt((int) self);
+	return true;
+}
+
+bool grimJson::initializeFromJSON({{ cppNamespace(grimtype) }}t{{ grimtype.name }}::e{{ enum.name }}& self, const JsonValue& value, JsonAllocator& allocator)
+{
+	self = ({{ cppNamespace(grimtype) }}t{{ grimtype.name }}::e{{ enum.name }}) value.GetInt();
+	return true;	
+}
+
+{% endfor %}
+bool grimJson::serializeToJSON( const {{ cppNamespace(grimtype) }}t{{ grimtype.name }}& self, JsonValue& value, JsonAllocator& allocator)
+{
+	bool ret;
+	value.SetObject();
+	JsonValue jsonMember;
+{% for attribute in grimtype.allAttributes %}
+	ret = grimJson::serializeToJSON(self.{{attribute.name}}, jsonMember, allocator);
+	value.AddMember("{{attribute.name}}", jsonMember, allocator);
+{% endfor %}
+	return ret;
+}
+
+bool grimJson::initializeFromJSON({{ cppNamespace(grimtype) }}t{{grimtype.name}}& self, const JsonValue& value, JsonAllocator& allocator)
+{
+	bool ret;
+{% for attribute in grimtype.allAttributes %}
+	GRIM_ASSERT(value.HasMember("{{attribute.name}}"), "JSON input for type %s is missing attribute %s", "{{grimtype.name}}", "{{attribute.name}}");
+	ret = grimJson::initializeFromJSON(self.{{attribute.name}}, value["{{attribute.name}}"], allocator);
+{% endfor %}
+	return true;
+}
+{% endif %}
+{% endmacro %}
+
+{% macro enumDeclarations(grimtype) -%}
+{% for enum in grimtype.enums %}
+enum e{{enum.name}}
+{
+	{% for val in enum.valueList %}
+	k{{val}},
+	{% endfor %}
+};
+	
+{% endfor %}
+{%- endmacro %}
