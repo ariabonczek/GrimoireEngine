@@ -51,9 +51,6 @@
     <ClCompile Include="View.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="Clock.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="GfxDebug.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
@@ -139,9 +136,6 @@
       <Filter>Platform</Filter>
     </ClInclude>
     <ClInclude Include="EngineMain.h" />
-    <ClInclude Include="Clock.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="GfxDebug.h">
       <Filter>Debug</Filter>
     </ClInclude>
@@ -154,10 +148,10 @@
     <ClInclude Include="ForwardLighting.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="RenderGraph.h">
+    <ClInclude Include="MeshElement.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="MeshElement.h">
+    <ClInclude Include="RenderGraph.h">
       <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>

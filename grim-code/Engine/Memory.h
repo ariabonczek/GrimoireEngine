@@ -1,35 +1,49 @@
 #pragma once
 
-namespace mem 
+#include <Shared/Core/SizeAlign.h>
+
+#define kMaxAllocatorNameLength 64
+
+namespace mem
 {
-	struct SizeAlign
-	{
-		SizeAlign() {}
-		SizeAlign(uint32_t size, uint32_t align) :size(size), align(align) {}
-
-		uint32_t size;
-		uint32_t align;
-	};
-
 	class LinearAllocator
 	{
-		enum 
+		enum
 		{
 			kDefaultMemoryAlignment = 4,
-			kMaxAllocatorNameLength = 64
 		};
 	public:
-		LinearAllocator(void* memory, uint32_t memorySize, const char* name);
-		
+		LinearAllocator(void* memory, size_t memorySize, const char* name);
+
 		void* Allocate(const SizeAlign& sizeAlign);
-		void* Allocate(const uint32_t size, const uint32_t align = 4);
+		void* Allocate(const size_t size, const size_t align = 4);
 		void Clear();
 		void Restore(void* restorePoint, bool zeroFreed = false);
 
 	private:
-		uint64_t m_memStart;
-		uint64_t m_memEnd;
-		uint64_t m_memCurrent;
+		size_t m_memStart;
+		size_t m_memEnd;
+		size_t m_memCurrent;
+
+		char m_name[kMaxAllocatorNameLength]; // TODO better const name length
+	};
+
+	// Single-linked free list stores the "next" pointer inside of the free memory itself
+	// Therefore, an element must be at least sizeof(void*)
+	// Pool elements are always aligned to sizeof(void*)
+	class PoolAllocator
+	{
+	public:
+		PoolAllocator(void* memory, size_t memorySize, size_t poolElementSize, const char* name);
+
+		void* Allocate();
+		void Free(void*);
+
+	private:
+		size_t m_poolStart;
+		size_t m_nextFree;
+		uint32_t m_capacity;
+		uint32_t m_elementSize;
 
 		char m_name[kMaxAllocatorNameLength]; // TODO better const name length
 	};

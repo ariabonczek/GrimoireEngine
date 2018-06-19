@@ -78,7 +78,8 @@ namespace gfx {
 	{
 		plat::Flip();
 
-		s_commandIndex = ++s_commandIndex % kNumCommandContexts;
+		int nextCommandIndex = ++s_commandIndex % kNumCommandContexts;
+		s_commandIndex = nextCommandIndex;
 
 		g_frameCounter++;
 	}

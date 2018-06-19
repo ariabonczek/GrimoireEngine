@@ -22,7 +22,7 @@ void gfx::ForwardLighting_Execute(gfx::CommandContext* ctx, gfx::RenderPass pass
 
 	ForwardLighting_Data* passData = (ForwardLighting_Data*)data;
 	
-	for (int i = 0; i < passData->numElements;  ++i)
+	for (int i = 0; i < passData->numElements; ++i)
 	{
 		const DrawElement& element = passData->drawElements[i];
 

@@ -5,7 +5,7 @@
 #endif
 
 #include <Engine/Gfx.h>
-#include <Engine/Memory.h>
+#include <Shared/Core/SizeAlign.h>
 
 namespace gfx
 {
@@ -29,7 +29,7 @@ namespace gfx
 		char name[kBufferNameMaxLength];
 
 		void* baseAddress;
-		mem::SizeAlign sizeAlign;
+		SizeAlign sizeAlign;
 		BufferType bufferType;
 		uint32_t stride;
 	};

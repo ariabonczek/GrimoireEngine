@@ -68,7 +68,7 @@ public:
 	struct binaryBlob
 	{
 		grim::uuid meshResourceUuid;
-		grimDat::tModel m_attributes;
+		gd::tModel m_attributes;
 	};
 
 	ModelElement(Entity* const entity);
@@ -84,7 +84,7 @@ public:
 	MeshResource* m_mesh;
 	Material* m_material;
 
-	grimDat::tModel m_attributes;
+	gd::tModel m_attributes;
 };
 
 class Light : public Element
@@ -92,7 +92,7 @@ class Light : public Element
 public:
 	struct binaryBlob
 	{
-		grimDat::tLight m_attributes;
+		gd::tLight m_attributes;
 	};
 
 	Light(Entity*const entity);
@@ -104,6 +104,6 @@ public:
 	bool serializeBinary(void* buffer)const;
 	bool deserializeBinary(void* buffer);
 
-	grimDat::tLight m_attributes;
+	gd::tLight m_attributes;
 };
 }

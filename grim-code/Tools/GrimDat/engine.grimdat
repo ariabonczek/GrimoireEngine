@@ -1,27 +1,6 @@
 {
 	"types":[
 		{
-			"name":"Vector2",
-			"typeSpecifier": "struct",
-			"namespace": "",
-			"serializeable": true,
-			"attributes": [
-				{ "name": "x", "type": "float", "default": 0.0 },
-				{ "name": "y", "type": "float", "default": 0.0 }
-			]
-		},
-		{
-			"name":"Vector3",
-			"typeSpecifier": "struct",
-			"namespace": "",
-			"serializeable": true,
-			"attributes": [
-				{ "name": "x", "type": "float", "default": 0.0 },
-				{ "name": "y", "type": "float", "default": 0.0 },
-				{ "name": "z", "type": "float", "default": 0.0 }
-			]
-		},
-		{
 			"name":"ColorRGBA",
 			"typeSpecifier": "struct",
 			"namespace": "",
@@ -34,63 +13,45 @@
 			]
 		},
 		{
-			"name":"Quaternion",
-			"typeSpecifier": "struct",
-			"namespace": "",
-			"serializeable": true,
-			"attributes": [
-				{ "name": "x", "type": "float", "default": 0.0 },
-				{ "name": "y", "type": "float", "default": 0.0 },
-				{ "name": "z", "type": "float", "default": 0.0 },
-				{ "name": "w", "type": "float", "default": 1.0 }
-			]
-
-		},
-		{
 			"name":"Transform",
 			"typeSpecifier": "class",
-			"namespace": "grimDat",
+			"namespace": "gd",
 			"serializeable": true,
-			"headers":[
-				"generated_Vector3.h",
-				"generated_Quaternion.h"
-			],
 			"attributes": [
-				{ "name": "position",  "type": "tVector3" },
-				{ "name": "rotation",  "type": "tVector3" },
-				{ "name": "scale", 	   "type": "tVector3" }
+				{ "name": "position",  "type": "Vector3" },
+				{ "name": "rotation",  "type": "Vector3" },
+				{ "name": "scale", 	   "type": "Vector3" }
 			]
 		},
 		{
 			"name":"Model",
 			"typeSpecifier": "class",
-			"namespace": "grimDat",
+			"namespace": "gd",
 			"serializeable": true,
 			"headers": [
 				"generated_Transform.h"
 			],
 			"attributes": [
-				{ "name": "transform",  "type": "tTransform" }
+				{ "name": "transform",  "type": "gd::tTransform" }
 			]
 		},
 		{
 			"name":"Light",
 			"typeSpecifier": "class",
-			"namespace": "grimDat",
+			"namespace": "gd",
 			"serializeable": true,
 			"headers": [
-				"generated_ColorRGBA.h",
-				"generated_Vector3.h"
+				"generated_ColorRGBA.h"
 			],
 			"enums":[
 				{ "name": "LightType", "values": ["Directional", "Point", "Spot", "NumLightTypes"] }
 			],
 			"attributes": [
-				{ "name": "color",  "type": "tColorRGBA" },
-				{ "name": "direction",  "type": "tVector3" },
-				{ "name": "intensity", "type": "float", "default": 1.0},
-				{ "name": "type", "type": "eLightType", "default": "kDirectional" },
-				{ "name": "size", "type": "float", "default": 1.0 }
+				{ "name": "color",  	"type": "tColorRGBA" },
+				{ "name": "direction",  "type": "Vector3" },
+				{ "name": "intensity", 	"type": "float", 		"default": 1.0},
+				{ "name": "type", 		"type": "eLightType", 	"default": "kDirectional" },
+				{ "name": "size", 		"type": "float", 		"default": 1.0 }
 			]
 		}
 	]

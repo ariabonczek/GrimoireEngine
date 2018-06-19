@@ -29,7 +29,7 @@ struct Quaternion
 	//
 	// Static Functions
 	//
-	static Quaternion CreateFromAxisAngle(Vector3 axis, float angle);
+	static Quaternion CreateFromAxisAngle(Vector3 axis, float degrees);
 	static Quaternion CreateFromRotationMatrix(Matrix m);
 	static Quaternion CreateFromEulerAngles(Vector3 v);
 	static Quaternion Lerp(Quaternion q1, Quaternion q2, float amount);

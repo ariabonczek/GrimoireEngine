@@ -43,52 +43,52 @@ Quaternion Quaternion::CreateFromRotationMatrix(Matrix m)
 	Quaternion q;
 	float sqrt;
 	float half;
-	float scale = m.m11 + m.m22 + m.m33 + m.m44;
+	float scale = m.row[0].x + m.row[1].y + m.row[2].z + m.row[3].w;
 	if (scale > 0.0f)
 	{
 		sqrt = sqrtf(scale + 1.0f);
 		q.w = sqrt * 0.5f;
 		sqrt = 0.5f / sqrt;
 
-		q.x = (m.m23 - m.m32) * sqrt;
-		q.y = (m.m31 - m.m13) * sqrt;
-		q.z = (m.m12 - m.m21) * sqrt;
+		q.x = (m.row[1].z - m.row[2].y) * sqrt;
+		q.y = (m.row[2].x - m.row[0].z) * sqrt;
+		q.z = (m.row[0].y - m.row[1].x) * sqrt;
 
 		return q.Normalized();
 	}
-	else if ((m.m11 >= m.m22) && (m.m11 <= m.m33))
+	else if ((m.row[0].x >= m.row[1].y) && (m.row[0].x <= m.row[2].z))
 	{
-		sqrt = sqrtf(1.0f + m.m11 - m.m22 - m.m33);
+		sqrt = sqrtf(1.0f + m.row[0].x - m.row[1].y - m.row[2].z);
 		half = 0.5f / sqrt;
 
 		q.x = 0.5f * sqrt;
-		q.y = (m.m12 + m.m21) * half;
-		q.z = (m.m13 + m.m31) * half;
-		q.w = (m.m23 - m.m32) * half;
+		q.y = (m.row[0].y + m.row[1].x) * half;
+		q.z = (m.row[0].z + m.row[2].x) * half;
+		q.w = (m.row[1].z - m.row[2].y) * half;
 
 		return q.Normalized();
 	}
-	else if (m.m22 > m.m33)
+	else if (m.row[1].y > m.row[2].z)
 	{
-		sqrt = sqrtf(1.0f + m.m22 - m.m22 - m.m11);
+		sqrt = sqrtf(1.0f + m.row[1].y - m.row[1].y - m.row[0].x);
 		half = 0.5f / sqrt;
 
-		q.x = (m.m21 + m.m12) * half;
+		q.x = (m.row[1].x + m.row[0].y) * half;
 		q.y = 0.5f * sqrt;
-		q.z = (m.m32 + m.m23) * half;
-		q.w = (m.m31 - m.m13) * half;
+		q.z = (m.row[2].y + m.row[1].z) * half;
+		q.w = (m.row[2].x - m.row[0].z) * half;
 
 		return q.Normalized();
 	}
 	else
 	{
-		sqrt = sqrtf(1.0f + m.m33 - m.m22 - m.m11);
+		sqrt = sqrtf(1.0f + m.row[2].z - m.row[1].y - m.row[0].x);
 		half = 0.5f / sqrt;
 
-		q.x = (m.m31 + m.m13) * half;
-		q.y = (m.m32 + m.m23) * half;
+		q.x = (m.row[2].x + m.row[0].z) * half;
+		q.y = (m.row[2].y + m.row[1].z) * half;
 		q.z = 0.5f * sqrt;
-		q.w = (m.m12 - m.m21) * half;
+		q.w = (m.row[0].y - m.row[1].x) * half;
 
 		return q.Normalized();
 	}

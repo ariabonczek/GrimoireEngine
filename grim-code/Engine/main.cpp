@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <Engine/Clock.h>
 #include <Engine/CommandContext.h>
 #include <Engine/EngineGlobals.h>
 #include <Engine/Filesystem.h>
@@ -14,6 +13,7 @@
 #include <Engine/View.h>
 
 #include <Shared/Core/grimJson.h>
+#include <Shared/Core/Timer.h>
 
 #include <Tools/GrimoireBuild/Grimoire.h>
 
@@ -43,7 +43,7 @@ static gfx::RenderPass s_passDef;
 
 struct LightBuffer
 {
-	grimDat::tLight lights[10];
+	gd::tLight lights[10];
 	uint32_t numLights;
 };
 static LightBuffer s_allLights;
@@ -127,7 +127,7 @@ struct Vertex
 
 static void Init()
 {
-	grim::InitHWClock();
+	Clock::Initialize();
 	mem::Init();
 	grimFile::Init();
 
@@ -183,8 +183,7 @@ static void Init()
 	gfx::CreateBuffer(indexBufferDefinition, indexBuffer);
 
 	// view constant buffer
-	Matrix viewLW = Matrix::kIdentity;
-	viewLW.SetRowW(Vector4(0.0f, 0.0f, -3.0f, 1.0f));
+	Matrix viewLW = Matrix::CreateLookAt(Vector3(0.0f, 0.0f, -3.0f), Vector3::kZero, Vector3::kUp);
 	s_view = gfx::MakeView(0.25f * 3.141592f, (float)g_engineGlobals.frameBufferWidth, (float)g_engineGlobals.frameBufferHeight, 0.01f, 100.0f, viewLW);
 
 	s_renderView = gfx::RenderViewFromView(s_view);
@@ -196,20 +195,14 @@ static void Init()
 	memset(&s_allLights, 0, sizeof(LightBuffer));
 	s_allLights.numLights = 1;
 
-	grimDat::tLight light;
-
-	tColorRGBA color;
-	color.r = 1.0f; color.g = 1.0f; color.b = 1.0f; color.a = 1.0f;
-	light.color = color;
-
-	tVector3 direction;
-	direction.x = 0.0f;
-	direction.y = -1.0f;
-	direction.z = 0.0f;
-	light.direction = direction;
-
+	gd::tLight light;
+	light.color.r = 1.0f;
+	light.color.g = 0.0f;
+	light.color.b = 0.0f;
+	light.color.a = 1.0f;
+	light.direction = Vector3(0.0f, -1.0f, 0.0f);
 	light.intensity = 1.0f;
-	light.type = grimDat::tLight::eLightType::kDirectional;
+	light.type = gd::tLight::eLightType::kDirectional;
 	light.size = 1.0f;
 
 	gfx::BufferDefinition lightBufferDef{ "Light Buffer", &s_allLights,{ sizeof(LightBuffer), 0 }, gfx::kConstantBuffer, sizeof(LightBuffer) };
@@ -244,7 +237,7 @@ static void Init()
 
 static void GameLoop()
 {
-	debug::DebugCameraMovement(s_view, (float)grim::TimeToSeconds(grim::GetFrameTime()));
+	debug::DebugCameraMovement(s_view, Clock::GetFrameTime());
 }
 
 static void RunRenderGraph()
@@ -293,9 +286,20 @@ static void Debug_UpdateWindowTitle()
 	float mouseY = grimInput::GetFloat(grimInput::kMouseReticleY);
 
 	char newTitle[EngineGlobals::kMaxWindowTitleLength];
-	float timeMs = (float)grim::TimeToMilliseconds(grim::GetFrameTime());
+	float timeSeconds = Clock::GetFrameTime();
 
-	snprintf(newTitle, EngineGlobals::kMaxWindowTitleLength, "Grimoire Engine - Frame Time: %.1fms (%.2f fps) Mouse X: %.3f, MouseY: %.3f", timeMs, 1000.f / timeMs, mouseX, mouseY);
+	Vector4 eyePosition = s_renderView.eyePosition;
+
+	snprintf(newTitle, EngineGlobals::kMaxWindowTitleLength, "Grimoire Engine - Process Time: %.3f, Frame Time: %.1fms (%.2f fps) Mouse X: %.3f, Mouse Y: %.3f, Cam X: %.3f, Cam Y: %.3f, Cam Z: %.3f", 
+		Clock::GetTimeSinceProcessStart(),
+		timeSeconds * 1000.0f, 
+		1.0f / timeSeconds, 
+		mouseX, 
+		mouseY,
+		eyePosition.x,
+		eyePosition.y,
+		eyePosition.z	
+	);
 	EngineGlobals::SetWindowTitle(newTitle);
 }
 
@@ -307,15 +311,15 @@ int EngineMain(int argc, char** argv)
 
 	while (true)
 	{
+		Clock::FrameTick();
+
 		plat::ProcessGfx();
 
 		if (gfx::ShouldClose())
 			break;
 
-		grim::FrameClockTick();
 		grimInput::Update();
 		
-		//UpdateRenderGraph();
 		GameLoop();
 		RunRenderGraph();
 

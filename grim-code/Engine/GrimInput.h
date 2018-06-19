@@ -26,13 +26,17 @@ namespace grimInput
 
 		kL1,
 		kR1,
+
+		kLeftMouse,
+		kRightMouse,
+		kMiddleMouse,
 		
-		kNumButtons
+		kLastButton
 	};
 
 	enum Axis  // floating point
 	{
-		kLeftReticleX = kNumButtons, // can't overlap these values
+		kLeftReticleX = kLastButton, // can't overlap these values
 		kLeftReticleY,
 		kRightReticleX,
 		kRightReticleY,
@@ -41,7 +45,16 @@ namespace grimInput
 		kBackRightReticle,
 
 		kMouseReticleX,
-		kMouseReticleY
+		kMouseReticleY,
+
+		kLastAxis
+	};
+
+	enum Key
+	{
+		kLeftAlt = kLastAxis,
+
+		kLastKey
 	};
 
 #if PLATFORM_PC
@@ -52,5 +65,12 @@ namespace grimInput
 	void Update();
 
 	bool  GetBool(Button button);
+	bool  GetBool(Key button);
+	bool  GetBoolDown(Button button);
+	bool  GetBoolDown(Key button);
+	bool  GetBoolUp(Button button);
+	bool  GetBoolUp(Key button);
+
 	float GetFloat(Axis axis);
+	float GetFloatDelta(Axis axis);
 }

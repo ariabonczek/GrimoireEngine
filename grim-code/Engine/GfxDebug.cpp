@@ -14,9 +14,11 @@ namespace debug
 	static float s_lookSpeed = 0.333f;
 	
 	static bool s_isPivotMode = false;
+	static bool s_isMouseMode = false;
+
 	static Vector3 s_pivot = Vector3(0.0f, 0.0f, 0.0f);
 	static Vector3 s_viewDirection = Vector3(0.0f, 0.0f, 1.0f);
-	static float s_distanceFromPivot = 1.0f;
+	static float s_distanceFromPivot = 3.0f;
 
 	static Matrix DebugCam_FirstPersonMode(const gfx::View& view, float dt)
 	{
@@ -82,6 +84,8 @@ namespace debug
 
 		s_viewDirection = lwMatrix.GetRowZ().Normalized().AsVector3();
 
+		bool anyMovement = false;
+
 		// always looks at pivot
 		// left stick moves the pivot
 		// right stick Y zooms camera in/out, right Stick X rotates around pivot
@@ -128,7 +132,72 @@ namespace debug
 			s_viewDirection = s_viewDirection * rotate;
 		}
 
-		lwMatrix = Matrix::CreateLookAt(s_pivot + s_viewDirection * s_distanceFromPivot, s_pivot, Vector3::kUp);
+		if(anyMovement)
+			lwMatrix = Matrix::CreateLookAt(s_pivot + s_viewDirection * s_distanceFromPivot, s_pivot, Vector3::kUp);
+
+		return lwMatrix;
+	}
+
+	// always looks at pivot
+	// left stick moves the pivot
+	// right stick Y zooms camera in/out, right Stick X rotates around pivot
+	static Matrix DebugCam_MouseMode(const gfx::View& view, float dt)
+	{
+		Matrix lwMatrix = view.viewToWorld;
+
+		if (grimInput::GetBoolDown(grimInput::kLeftAlt))
+		{
+			Vector3 eyePosition = lwMatrix.GetRowW().AsVector3();
+			Vector3 eyeToPivot = s_pivot - eyePosition;
+
+			s_distanceFromPivot = eyeToPivot.Length();
+			s_viewDirection = eyeToPivot.Normalized();
+		}
+		
+		bool anyMovement = false;
+
+		float deltaX = grimInput::GetFloatDelta(grimInput::kMouseReticleX) * dt * 60; // factoring in dt to prevent framerate issues, multiplying by 60 to normalize it
+		float deltaY = grimInput::GetFloatDelta(grimInput::kMouseReticleY) * dt * 60; // factoring in dt to prevent framerate issues, multiplying by 60 to normalize it
+
+		// mouse look
+		if(grimInput::GetBool(grimInput::kLeftMouse))
+		{
+			// X movement Yaw (rotate up axis)
+			Vector3 axisYaw = Vector3::kUp;
+			Quaternion rotateYaw = Quaternion::CreateFromAxisAngle(axisYaw, deltaX * 360);
+
+			// Y movement pitch (rotate right axis)
+			Vector3 axisPitch = Vector4::Normalized(lwMatrix.GetRowX()).AsVector3();
+			Quaternion rotatePitch = Quaternion::CreateFromAxisAngle(axisPitch, deltaY * 360);
+
+			Quaternion combined = (rotatePitch * rotateYaw).Normalized();
+			Matrix combinedMatrix = Matrix::CreateFromQuaternion(combined);
+
+			s_viewDirection = s_viewDirection * combinedMatrix;
+			anyMovement = true;
+		}
+
+		// pivot zoom
+		if (grimInput::GetBool(grimInput::kRightMouse))
+		{
+			s_distanceFromPivot -= s_distanceFromPivot * deltaX;
+			anyMovement = true;
+		}
+
+		// pivot zoom
+		if (grimInput::GetBool(grimInput::kMiddleMouse))
+		{
+			Vector3 cameraRight = lwMatrix.GetRowX().Normalized().AsVector3();
+			Vector3 cameraUp = lwMatrix.GetRowY().Normalized().AsVector3();
+
+			s_pivot -= cameraRight * deltaX * s_distanceFromPivot;
+			s_pivot += cameraUp * deltaY * s_distanceFromPivot;
+
+			anyMovement = true;
+		}
+
+		if (anyMovement)
+			lwMatrix = Matrix::CreateLookAt(s_pivot - s_viewDirection * s_distanceFromPivot, s_pivot, Vector3::kUp);
 
 		return lwMatrix;
 	}
@@ -138,7 +207,14 @@ namespace debug
 		if (grimInput::GetBool(grimInput::kSquare))
 			s_isPivotMode = !s_isPivotMode;
 
-		const Matrix newViewToWorld = s_isPivotMode ? DebugCam_PivotMode(view, dt) : DebugCam_FirstPersonMode(view, dt);
+		s_isMouseMode = grimInput::GetBool(grimInput::kLeftAlt);
+
+		Matrix newViewToWorld = Matrix::kIdentity;
+		if (s_isMouseMode)
+			newViewToWorld = DebugCam_MouseMode(view, dt);
+		else
+			newViewToWorld = s_isPivotMode ? DebugCam_PivotMode(view, dt) : DebugCam_FirstPersonMode(view, dt);
+
 		gfx::UpdateView(view, newViewToWorld);
 	}
 }

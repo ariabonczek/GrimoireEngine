@@ -64,9 +64,10 @@ namespace gfx
 
 	void RenderGraph::Compile(const grimJson::JsonValue& renderSettings)
 	{
+#if _DEBUG
 		grimJson::JsonAllocator allocator;
 		m_renderSettings.CopyFrom(renderSettings, allocator);
-
+#endif
 		std::unordered_map<std::string, SurfaceIndex> surfaceMap;
 		std::unordered_map<std::string, BufferIndex> bufferMap;
 		std::unordered_map<std::string, RenderGraphNode*> nodeMap;
@@ -117,7 +118,7 @@ namespace gfx
 
 				if (resource.HasMember("sizeCodeDriven") && resource["sizeCodeDriven"].GetBool() == true)
 				{
-					desc.sizeAlign = mem::SizeAlign(0, 0);
+					desc.sizeAlign = SizeAlign(0, 0);
 				}
 				else
 				{

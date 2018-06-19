@@ -1,6 +1,6 @@
 {
-    "windowWidth":  1280,
-    "windowHeight": 720,
+	"windowWidth":  1280,
+	"windowHeight": 720,
 	"windowTitle": "Bet you wish you had a cool skateboard",
 	"numDisplayBuffers": 2,
 	"displayBufferResolutionX": 1920,

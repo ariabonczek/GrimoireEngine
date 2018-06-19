@@ -6,7 +6,7 @@
 #include <Shared/rapidjson/error/en.h>
 
 #include <Shared/Core/Assert.h>
-
+#include <Shared/Math/Math.h>
 #include <stdint.h>
 
 namespace grimJson 
@@ -26,6 +26,11 @@ namespace grimJson
 	bool serializeToJSON(const double self, JsonValue& value, JsonAllocator& allocator);
 	bool serializeToJSON(const uint32_t self, JsonValue& value, JsonAllocator& allocator);
 	bool serializeToJSON(const uint64_t self, JsonValue& value, JsonAllocator& allocator);
+	bool serializeToJSON(const Vector2 self, JsonValue& value, JsonAllocator& allocator);
+	bool serializeToJSON(const Vector3 self, JsonValue& value, JsonAllocator& allocator);
+	bool serializeToJSON(const Vector4 self, JsonValue& value, JsonAllocator& allocator);
+	bool serializeToJSON(const Matrix self, JsonValue& value, JsonAllocator& allocator);
+	bool serializeToJSON(const Quaternion self, JsonValue& value, JsonAllocator& allocator);
 
 	bool initializeFromJSON(bool& self, const JsonValue& value, JsonAllocator& allocator);
 	bool initializeFromJSON(char* self, const JsonValue& value, JsonAllocator& allocator);
@@ -35,4 +40,9 @@ namespace grimJson
 	bool initializeFromJSON(double& self, const JsonValue& value, JsonAllocator& allocator);
 	bool initializeFromJSON(uint32_t& self, const JsonValue& value, JsonAllocator& allocator);
 	bool initializeFromJSON(uint64_t& self, const JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON(Vector2& self, const JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON(Vector3& self, const JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON(Vector4& self, const JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON(Matrix& self, const JsonValue& value, JsonAllocator& allocator);
+	bool initializeFromJSON(Quaternion& self, const JsonValue& value, JsonAllocator& allocator);
 }

@@ -12,131 +12,122 @@ Matrix Matrix::kIdentity(
 	);
 
 Matrix::Matrix() :
-	m11(0), m12(0), m13(0), m14(0),
-	m21(0), m22(0), m23(0), m24(0),
-	m31(0), m32(0), m33(0), m34(0),
-	m41(0), m42(0), m43(0), m44(0)
+	row{ Vector4(), Vector4(), Vector4(), Vector4() }
 {}
 
 Matrix::Matrix(float m11, float m12, float m13, float m14, float m21, float m22, float m23, float m24, float m31, float m32, float m33, float m34, float m41, float m42, float m43, float m44) :
-	m11(m11), m12(m12), m13(m13), m14(m14),
-	m21(m21), m22(m22), m23(m23), m24(m24),
-	m31(m31), m32(m32), m33(m33), m34(m34),
-	m41(m41), m42(m42), m43(m43), m44(m44)
+	row{ { m11, m12, m13, m14 }, { m21, m22, m23, m24 }, { m31, m32, m33, m34 }, { m41, m42, m43, m44 } }
 {}
 
 Matrix::Matrix(Vector4 rowX, Vector4 rowY, Vector4 rowZ, Vector4 rowW) :
-	m11(rowX.x), m12(rowX.y), m13(rowX.z), m14(rowX.w),
-	m21(rowY.x), m22(rowY.y), m23(rowY.z), m24(rowY.w),
-	m31(rowZ.x), m32(rowZ.y), m33(rowZ.z), m34(rowZ.w),
-	m41(rowW.x), m42(rowW.y), m43(rowW.z), m44(rowW.w)
+	row{ rowX, rowY, rowZ, rowW }
 {}
 
 
 float Matrix::Determinant()const
 {
-	return m11 * DeterminantHelper(m22, m23, m24, m32, m33, m34, m42, m43, m44) -
-		m12 * DeterminantHelper(m21, m23, m24, m31, m33, m34, m41, m43, m44) +
-		m13 * DeterminantHelper(m21, m22, m24, m31, m32, m34, m41, m42, m44) -
-		m14 * DeterminantHelper(m21, m22, m23, m31, m32, m33, m41, m42, m43);
+	return row[0].x * DeterminantHelper(row[1].y, row[1].z, row[1].w, row[2].y, row[2].z, row[2].w, row[3].y, row[3].z, row[3].w) -
+		row[0].y * DeterminantHelper(row[1].x, row[1].z, row[1].w, row[2].x, row[2].z, row[2].w, row[3].x, row[3].z, row[3].w) +
+		row[0].z * DeterminantHelper(row[1].x, row[1].y, row[1].w, row[2].x, row[2].y, row[2].w, row[3].x, row[3].y, row[3].w) -
+		row[0].w * DeterminantHelper(row[1].x, row[1].y, row[1].z, row[2].x, row[2].y, row[2].z, row[3].x, row[3].y, row[3].z);
 }
  
 Matrix  Matrix::Transpose()const
 {
-	return Matrix(m11, m21, m31, m41, m12, m22, m32, m42, m13, m23, m33, m43, m14, m24, m34, m44);
+	return Matrix(row[0].x, row[1].x, row[2].x, row[3].x, row[0].y, row[1].y, row[2].y, row[3].y, row[0].z, row[1].z, row[2].z, row[3].z, row[0].w, row[1].w, row[2].w, row[3].w);
 }
 
 Vector4 Matrix::GetRowX()const
 {
-	return Vector4(m11, m12, m13, m14);
+	return Vector4(row[0].x, row[0].y, row[0].z, row[0].w);
 }
 
 Vector4 Matrix::GetRowY()const
 {
-	return Vector4(m21, m22, m23, m24);
+	return Vector4(row[1].x, row[1].y, row[1].z, row[1].w);
 }
 
 Vector4 Matrix::GetRowZ()const
 {
-	return Vector4(m31, m32, m33, m34);
+	return Vector4(row[2].x, row[2].y, row[2].z, row[2].w);
 }
 
 Vector4 Matrix::GetRowW()const
 {
-	return Vector4(m41, m42, m43, m44);
+	return Vector4(row[3].x, row[3].y, row[3].z, row[3].w);
 }
 
 void Matrix::SetRowX(Vector4 val)
 {
-	m11 = val.x; m12 = val.y; m13 = val.z; m14 = val.w;
+	row[0].x = val.x; row[0].y = val.y; row[0].z = val.z; row[0].w = val.w;
 }
 
 void Matrix::SetRowY(Vector4 val)
 {
-	m21 = val.x; m22 = val.y; m23 = val.z; m24 = val.w;
+	row[1].x = val.x; row[1].y = val.y; row[1].z = val.z; row[1].w = val.w;
 }
 
 void Matrix::SetRowZ(Vector4 val)
 {
-	m31 = val.x; m32 = val.y; m33 = val.z; m34 = val.w;
+	row[2].x = val.x; row[2].y = val.y; row[2].z = val.z; row[2].w = val.w;
 }
 
 void Matrix::SetRowW(Vector4 val)
 {
-	m41 = val.x; m42 = val.y; m43 = val.z; m44 = val.w;
+	row[3].x = val.x; row[3].y = val.y; row[3].z = val.z; row[3].w = val.w;
 }
 
 Matrix operator*(const Matrix& l, const Matrix& r)
 {
 	return Matrix(
-		((l.m11 * r.m11) + (l.m12 * r.m21) + (l.m13 * r.m31) + (l.m14 * r.m41)),
-		((l.m11 * r.m12) + (l.m12 * r.m22) + (l.m13 * r.m32) + (l.m14 * r.m42)),
-		((l.m11 * r.m13) + (l.m12 * r.m23) + (l.m13 * r.m33) + (l.m14 * r.m43)),
-		((l.m11 * r.m14) + (l.m12 * r.m24) + (l.m13 * r.m34) + (l.m14 * r.m44)),
+		((l.row[0].x * r.row[0].x) + (l.row[0].y * r.row[1].x) + (l.row[0].z * r.row[2].x) + (l.row[0].w * r.row[3].x)),
+		((l.row[0].x * r.row[0].y) + (l.row[0].y * r.row[1].y) + (l.row[0].z * r.row[2].y) + (l.row[0].w * r.row[3].y)),
+		((l.row[0].x * r.row[0].z) + (l.row[0].y * r.row[1].z) + (l.row[0].z * r.row[2].z) + (l.row[0].w * r.row[3].z)),
+		((l.row[0].x * r.row[0].w) + (l.row[0].y * r.row[1].w) + (l.row[0].z * r.row[2].w) + (l.row[0].w * r.row[3].w)),
 
-		((l.m21 * r.m11) + (l.m22 * r.m21) + (l.m23 * r.m31) + (l.m24 * r.m41)),
-		((l.m21 * r.m12) + (l.m22 * r.m22) + (l.m23 * r.m32) + (l.m24 * r.m42)),
-		((l.m21 * r.m13) + (l.m22 * r.m23) + (l.m23 * r.m33) + (l.m24 * r.m43)),
-		((l.m21 * r.m14) + (l.m22 * r.m24) + (l.m23 * r.m34) + (l.m24 * r.m44)),
+		((l.row[1].x * r.row[0].x) + (l.row[1].y * r.row[1].x) + (l.row[1].z * r.row[2].x) + (l.row[1].w * r.row[3].x)),
+		((l.row[1].x * r.row[0].y) + (l.row[1].y * r.row[1].y) + (l.row[1].z * r.row[2].y) + (l.row[1].w * r.row[3].y)),
+		((l.row[1].x * r.row[0].z) + (l.row[1].y * r.row[1].z) + (l.row[1].z * r.row[2].z) + (l.row[1].w * r.row[3].z)),
+		((l.row[1].x * r.row[0].w) + (l.row[1].y * r.row[1].w) + (l.row[1].z * r.row[2].w) + (l.row[1].w * r.row[3].w)),
 
-		((l.m31 * r.m11) + (l.m32 * r.m21) + (l.m33 * r.m31) + (l.m34 * r.m41)),
-		((l.m31 * r.m12) + (l.m32 * r.m22) + (l.m33 * r.m32) + (l.m34 * r.m42)),
-		((l.m31 * r.m13) + (l.m32 * r.m23) + (l.m33 * r.m33) + (l.m34 * r.m43)),
-		((l.m31 * r.m14) + (l.m32 * r.m24) + (l.m33 * r.m34) + (l.m34 * r.m44)),
+		((l.row[2].x * r.row[0].x) + (l.row[2].y * r.row[1].x) + (l.row[2].z * r.row[2].x) + (l.row[2].w * r.row[3].x)),
+		((l.row[2].x * r.row[0].y) + (l.row[2].y * r.row[1].y) + (l.row[2].z * r.row[2].y) + (l.row[2].w * r.row[3].y)),
+		((l.row[2].x * r.row[0].z) + (l.row[2].y * r.row[1].z) + (l.row[2].z * r.row[2].z) + (l.row[2].w * r.row[3].z)),
+		((l.row[2].x * r.row[0].w) + (l.row[2].y * r.row[1].w) + (l.row[2].z * r.row[2].w) + (l.row[2].w * r.row[3].w)),
 
-		((l.m41 * r.m11) + (l.m42 * r.m21) + (l.m43 * r.m31) + (l.m44 * r.m41)),
-		((l.m41 * r.m12) + (l.m42 * r.m22) + (l.m43 * r.m32) + (l.m44 * r.m42)),
-		((l.m41 * r.m13) + (l.m42 * r.m23) + (l.m43 * r.m33) + (l.m44 * r.m43)),
-		((l.m41 * r.m14) + (l.m42 * r.m24) + (l.m43 * r.m34) + (l.m44 * r.m44))
+		((l.row[3].x * r.row[0].x) + (l.row[3].y * r.row[1].x) + (l.row[3].z * r.row[2].x) + (l.row[3].w * r.row[3].x)),
+		((l.row[3].x * r.row[0].y) + (l.row[3].y * r.row[1].y) + (l.row[3].z * r.row[2].y) + (l.row[3].w * r.row[3].y)),
+		((l.row[3].x * r.row[0].z) + (l.row[3].y * r.row[1].z) + (l.row[3].z * r.row[2].z) + (l.row[3].w * r.row[3].z)),
+		((l.row[3].x * r.row[0].w) + (l.row[3].y * r.row[1].w) + (l.row[3].z * r.row[2].w) + (l.row[3].w * r.row[3].w))
 		);
 }
 
 bool Matrix::operator==(const Matrix& m)const
 {
 	return
-		(m11 == m.m11) && (m12 == m.m12) && (m13 == m.m13) && (m14 == m.m14) &&
-		(m21 == m.m21) && (m22 == m.m22) && (m23 == m.m23) && (m24 == m.m24) &&
-		(m31 == m.m31) && (m32 == m.m32) && (m33 == m.m33) && (m34 == m.m34) &&
-		(m41 == m.m41) && (m42 == m.m42) && (m43 == m.m43) && (m44 == m.m44);
+		(row[0].x == m.row[0].x) && (row[0].y == m.row[0].y) && (row[0].z == m.row[0].z) && (row[0].w == m.row[0].w) &&
+		(row[1].x == m.row[1].x) && (row[1].y == m.row[1].y) && (row[1].z == m.row[1].z) && (row[1].w == m.row[1].w) &&
+		(row[2].x == m.row[2].x) && (row[2].y == m.row[2].y) && (row[2].z == m.row[2].z) && (row[2].w == m.row[2].w) &&
+		(row[3].x == m.row[3].x) && (row[3].y == m.row[3].y) && (row[3].z == m.row[3].z) && (row[3].w == m.row[3].w);
 }
 
 Matrix operator*(const Matrix& m, float s)
 {
 	return Matrix(
-		m.m11 * s, m.m12 * s, m.m13 *s, m.m14 * s,
-		m.m21 * s, m.m22 * s, m.m23 *s, m.m24 * s,
-		m.m31 * s, m.m32 * s, m.m33 *s, m.m34 *s,
-		m.m41 * s, m.m42 * s, m.m43 *s, m.m44 * s
+		m.row[0].x * s, m.row[0].y * s, m.row[0].z *s, m.row[0].w * s,
+		m.row[1].x * s, m.row[1].y * s, m.row[1].z *s, m.row[1].w * s,
+		m.row[2].x * s, m.row[2].y * s, m.row[2].z *s, m.row[2].w *s,
+		m.row[3].x * s, m.row[3].y * s, m.row[3].z *s, m.row[3].w * s
 		);
 }
 
 Matrix operator*(float s, Matrix& m)
 {
 	return Matrix(
-		m.m11 * s, m.m12 * s, m.m13 * s, m.m14 * s,
-		m.m21 * s, m.m22 * s, m.m23 * s, m.m24 * s,
-		m.m31 * s, m.m32 * s, m.m33 * s, m.m34 * s,
-		m.m41 * s, m.m42 * s, m.m43 * s, m.m44 * s
+		m.row[0].x * s, m.row[0].y * s, m.row[0].z * s, m.row[0].w * s,
+		m.row[1].x * s, m.row[1].y * s, m.row[1].z * s, m.row[1].w * s,
+		m.row[2].x * s, m.row[2].y * s, m.row[2].z * s, m.row[2].w * s,
+		m.row[3].x * s, m.row[3].y * s, m.row[3].z * s, m.row[3].w * s
 		);
 }
 
@@ -159,17 +150,18 @@ Matrix Matrix::CreateFromQuaternion(Quaternion q)
 		0.0f, 0.0f, 0.0f, 1.0f);
 }
 
-	Matrix Matrix::CreateLookAt(Vector3 position, Vector3 target, Vector3 up)
-	{
-		Vector3 v = Vector3::Normalize(target - position);
-		Vector3 v2 = Vector3::Normalize(Vector3::Cross(up, v));
-		Vector3 v3 = Vector3::Cross(v, v2);
+Matrix Matrix::CreateLookAt(Vector3 position, Vector3 target, Vector3 up)
+{
+	Vector3 lookForward = Vector3::Normalize(target - position);
+	Vector3 lookRight = Vector3::Normalize(Vector3::Cross(up, lookForward));
+	Vector3 lookUp = Vector3::Cross(lookForward, lookRight);
 
-		return Matrix(v2.x, v3.x, v.x, 0.0f,
-			v2.y, v3.y, v.y, 0.0f,
-			v2.z, v3.z, v.z, 0.0f,
-			-Vector3::Dot(v2, position), -Vector3::Dot(v3, position), -Vector3::Dot(v, position), 1.0f);
-	}
+	return Matrix(
+		Vector4(lookRight, 0.0f),
+		Vector4(lookUp, 0.0f),
+		Vector4(lookForward, 0.0f),
+		Vector4(position, 1.0f));
+}
 
 Matrix Matrix::CreateOrthographic(float width, float height, float zNear, float zFar)
 {
@@ -187,7 +179,8 @@ Matrix Matrix::CreatePerspective(float width, float height, float zNear, float z
 	if (zNear >= zFar)
 		throw "[Matrix] Invalid zNear and zFar values.";
 
-	return Matrix((2.0f * zNear) / width, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		(2.0f * zNear) / width, 0.0f, 0.0f, 0.0f,
 		0.0f, (2.0f * zNear) / height, 0.0f, 0.0f, 
 		0.0f, 0.0f, zFar / (zFar - zNear), 1.0f, 
 		0.0f, 0.0f, -(zNear * zFar) / (zFar - zNear), 0.0f);
@@ -202,7 +195,8 @@ Matrix Matrix::CreatePerspectiveFov(float fov, float aspect, float zNear, float 
 
 	float n = 1.0f / ((float)tanf(fov * 0.5f));
 	float n2 = n / aspect;
-	return Matrix(n2, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		n2, 0.0f, 0.0f, 0.0f,
 		0.0f, n, 0.0f, 0.0f,
 		0.0f, 0.0f, zFar / (zFar - zNear), 1.0f,
 		0.0f, 0.0f, -(zNear * zFar) / (zFar - zNear), 0.0f);
@@ -285,7 +279,8 @@ Matrix Matrix::CreateScale(float scale)
 
 Matrix Matrix::CreateScale(float x, float y, float z)
 {
-	return Matrix(x, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		x, 0.0f, 0.0f, 0.0f,
 		0.0f, y, 0.0f, 0.0f,
 		0.0f, 0.0f, z, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
@@ -293,7 +288,8 @@ Matrix Matrix::CreateScale(float x, float y, float z)
 
 Matrix Matrix::CreateScale(Vector3 scale)
 {
-	return Matrix(scale.x, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		scale.x, 0.0f, 0.0f, 0.0f,
 		0.0f, scale.y, 0.0f, 0.0f,
 		0.0f, 0.0f, scale.z, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f);
@@ -301,7 +297,8 @@ Matrix Matrix::CreateScale(Vector3 scale)
 
 Matrix Matrix::CreateTranslation(float x, float y, float z)
 {
-	return Matrix(1.0f, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		x, y, z, 1.0f);
@@ -309,7 +306,8 @@ Matrix Matrix::CreateTranslation(float x, float y, float z)
 
 Matrix Matrix::CreateTranslation(Vector3 translation)
 {
-	return Matrix(1.0f, 0.0f, 0.0f, 0.0f,
+	return Matrix(
+		1.0f, 0.0f, 0.0f, 0.0f,
 		0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		translation.x, translation.y, translation.z, 1.0f);
@@ -322,7 +320,8 @@ Matrix Matrix::CreateWorld(Vector3 position, Vector3 forward, Vector3 up)
 	x = Vector3::Normalize(Vector3::Cross(z, up));
 	y = Vector3::Normalize(Vector3::Cross(x, z));
 	
-	return Matrix(x.x, x.y, x.z, 0.0f,
+	return Matrix(
+		x.x, x.y, x.z, 0.0f,
 		y.x, y.y, y.z, 0.0f, 
 		z.x, z.y, z.z, 0.0f,
 		position.x, position.y, position.z, 1.0f);
@@ -332,22 +331,22 @@ Matrix Matrix::CreateWorld(Vector3 position, Vector3 forward, Vector3 up)
 Matrix Matrix::Inverse(Matrix m)
 {
 	// Source: https://github.com/mono/MonoGame/blob/develop/MonoGame.Framework/Matrix.cs
-	float num1 =m.m11;
-	float num2 =m.m12;
-	float num3 =m.m13;
-	float num4 =m.m14;
-	float num5 =m.m21;
-	float num6 =m.m22;
-	float num7 =m.m23;
-	float num8 =m.m24;
-	float num9 =m.m31;
-	float num10 = m.m32;
-	float num11 = m.m33;
-	float num12 = m.m34;
-	float num13 = m.m41;
-	float num14 = m.m42;
-	float num15 = m.m43;
-	float num16 = m.m44;
+	float num1 =m.row[0].x;
+	float num2 =m.row[0].y;
+	float num3 =m.row[0].z;
+	float num4 =m.row[0].w;
+	float num5 =m.row[1].x;
+	float num6 =m.row[1].y;
+	float num7 =m.row[1].z;
+	float num8 =m.row[1].w;
+	float num9 =m.row[2].x;
+	float num10 = m.row[2].y;
+	float num11 = m.row[2].z;
+	float num12 = m.row[2].w;
+	float num13 = m.row[3].x;
+	float num14 = m.row[3].y;
+	float num15 = m.row[3].z;
+	float num16 = m.row[3].w;
 	float num17 = (float)((double)num11 * (double)num16 - (double)num12 * (double)num15);
 	float num18 = (float)((double)num10 * (double)num16 - (double)num12 * (double)num14);
 	float num19 = (float)((double)num10 * (double)num15 - (double)num11 * (double)num14);
@@ -393,28 +392,28 @@ Matrix Matrix::Inverse(Matrix m)
 
 Matrix Matrix::Transpose(Matrix m)
 {
-	return Matrix(m.m11, m.m21, m.m31, m.m41, m.m12, m.m22, m.m32, m.m42, m.m13, m.m23, m.m33, m.m43, m.m14, m.m24, m.m34, m.m44);
+	return Matrix(m.row[0].x, m.row[1].x, m.row[2].x, m.row[3].x, m.row[0].y, m.row[1].y, m.row[2].y, m.row[3].y, m.row[0].z, m.row[1].z, m.row[2].z, m.row[3].z, m.row[0].w, m.row[1].w, m.row[2].w, m.row[3].w);
 }
 
 Vector3 Matrix::RotationToEuler(Matrix m)
 {
 	// Source: https://d3cw3dd2w32x2b.cloudfront.net/wp-content/uploads/2012/07/euler-angles1.pdf
-	float theta1 = atan2f(m.m23, m.m33);
-	float c2 = sqrt(m.m11*m.m11 + m.m12*m.m12);
-	float theta2 = atan2f(-m.m13, c2);
+	float theta1 = atan2f(m.row[1].z, m.row[2].z);
+	float c2 = sqrt(m.row[0].x*m.row[0].x + m.row[0].y*m.row[0].y);
+	float theta2 = atan2f(-m.row[0].z, c2);
 	float c1 = cosf(theta1);
 	float s1 = sinf(theta1);
-	float theta3 = atan2f(s1*m.m31 - c1*m.m21, c1*m.m22 -s1*m.m32);
+	float theta3 = atan2f(s1*m.row[2].x - c1*m.row[1].x, c1*m.row[1].y -s1*m.row[2].y);
 	return Vector3(theta1, theta2, theta3);
 }
 
 float Matrix::DeterminantHelper(float m11, float m12, float m13, float m21, float m22, float m23, float m31, float m32, float m33)const
 {
-	float d11 = m22*m33 - m23*m32;
-	float d12 = m21*m33 - m23*m31;
-	float d13 = m21*m32 - m22*m31;
+	float d11 = row[1].y*row[2].z - row[1].z*row[2].y;
+	float d12 = row[1].x*row[2].z - row[1].z*row[2].x;
+	float d13 = row[1].x*row[2].y - row[1].y*row[2].x;
 
-	return m11*d11 - m12*d12 + m13*d13;
+	return row[0].x*d11 - row[0].y*d12 + row[0].z*d13;
 }
 
 NS_MATH_END

@@ -55,3 +55,4 @@ grim-sourcedata/*
 *.ipdb
 *.enc
 *.idb
+*.opendb

@@ -97,7 +97,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Buffer.cpp" />
-    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="CommandContext.cpp" />
     <ClCompile Include="DrawElement.cpp" />
     <ClCompile Include="DXBuffer.cpp" />
@@ -127,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Buffer.h" />
-    <ClInclude Include="Clock.h" />
     <ClInclude Include="CommandContext.h" />
     <ClInclude Include="d3dx12.h" />
     <ClInclude Include="DrawElement.h" />

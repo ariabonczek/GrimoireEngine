@@ -19,7 +19,9 @@ namespace grimInput
 	void InitAndSetupMap(int windowWidth, int windowHeight)
 	{
 		s_inputManager.SetDisplaySize(windowWidth, windowHeight);
-		gainput::DeviceId mouseId = s_inputManager.CreateDevice<gainput::InputDeviceMouse>();
+		
+		gainput::DeviceId mouseId = s_inputManager.CreateDevice<gainput::InputDeviceMouse>()
+			;
 		gainput::DeviceId keyboardId = s_inputManager.CreateDevice<gainput::InputDeviceKeyboard>();
 		gainput::DeviceId padId = s_inputManager.CreateDevice<gainput::InputDevicePad>();
 
@@ -53,8 +55,13 @@ namespace grimInput
 		map.MapFloat(kMouseReticleX, mouseId, gainput::MouseAxisX);
 		map.MapFloat(kMouseReticleY, mouseId, gainput::MouseAxisY);
 
+		map.MapBool(kLeftMouse,		 mouseId, gainput::MouseButtonLeft);
+		map.MapBool(kRightMouse,	 mouseId, gainput::MouseButtonRight);
+		map.MapBool(kMiddleMouse,	 mouseId, gainput::MouseButtonMiddle);
+
 		// Keyboard
 		map.MapBool(kConfirm, keyboardId, gainput::KeyEnd);
+		map.MapBool(kLeftAlt, keyboardId, gainput::KeyAltL);
 
 		map.MapFloat(kLeftReticleX, keyboardId, gainput::KeyD);
 		map.MapFloat(kLeftReticleX, keyboardId, gainput::KeyA, 0.0f, 1.0f, Invert);
@@ -80,11 +87,41 @@ namespace grimInput
 
 	bool GetBool(Button button)
 	{
+		return GetInputMap().GetBool(button);
+	}
+
+	bool GetBool(Key key)
+	{
+		return GetInputMap().GetBool(key);
+	}
+
+	bool GetBoolDown(Button button)
+	{
+		return GetInputMap().GetBoolIsNew(button);
+	}
+
+	bool GetBoolDown(Key key)
+	{
+		return GetInputMap().GetBoolIsNew(key);
+	}
+
+	bool GetBoolUp(Button button)
+	{
 		return GetInputMap().GetBoolWasDown(button);
+	}
+
+	bool GetBoolUp(Key key)
+	{
+		return GetInputMap().GetBoolWasDown(key);
 	}
 
 	float GetFloat(Axis axis)
 	{
 		return GetInputMap().GetFloat(axis);
+	}
+
+	float GetFloatDelta(Axis axis)
+	{
+		return GetInputMap().GetFloatDelta(axis);
 	}
 }

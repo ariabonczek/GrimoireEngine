@@ -134,21 +134,31 @@ namespace plat {
 	{
 		// TODO: Support warp adapter
 
-		IDXGIAdapter1* adapter;
+		IDXGIAdapter1* chosenAdapter = nullptr;
+		IDXGIAdapter1* currentAdapter = nullptr;
 
-		for (int i = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(i, &adapter); ++i)
+		for (int i = 0; DXGI_ERROR_NOT_FOUND != factory->EnumAdapters1(i, &currentAdapter); ++i)
 		{
-			DXGI_ADAPTER_DESC1 desc;
-			adapter->GetDesc1(&desc);
+			DXGI_ADAPTER_DESC1 currentDesc;
+			currentAdapter->GetDesc1(&currentDesc);
 
-			if (desc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
+			if (currentDesc.Flags & DXGI_ADAPTER_FLAG_SOFTWARE)
 				continue;
 
-			if (SUCCEEDED(D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
-				break;
+			if (chosenAdapter != nullptr)
+			{
+				DXGI_ADAPTER_DESC1 chosenDesc;
+				chosenAdapter->GetDesc1(&chosenDesc);
+
+				if (chosenDesc.DedicatedVideoMemory > currentDesc.DedicatedVideoMemory)
+					continue;
+			}
+
+			if (SUCCEEDED(D3D12CreateDevice(currentAdapter, D3D_FEATURE_LEVEL_11_0, _uuidof(ID3D12Device), nullptr)))
+				chosenAdapter = currentAdapter;
 		}
 
-		HRESULT hr = D3D12CreateDevice(adapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&s_device));
+		HRESULT hr = D3D12CreateDevice(chosenAdapter, D3D_FEATURE_LEVEL_11_0, IID_PPV_ARGS(&s_device));
 		GRIM_ASSERT(!hr, " Failed to create device");
 		s_device->SetName(L"DX12 Device");
 
@@ -250,7 +260,7 @@ namespace plat {
 
 	void Flip()
 	{
-		s_swapChain->Present(0, 0);
+		s_swapChain->Present(1, 0);
 	}
 	
 	int GetCurrentBackbufferIndex()

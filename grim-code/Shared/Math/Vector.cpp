@@ -93,6 +93,9 @@ Vector3 Vector3::Normalized()const { float val = 1.0f / sqrtf(x*x + y*y + z*z); 
 
 Vector3 Vector3::operator-(){ return Vector3(-x, -y, -z); }
 Vector3 Vector3::operator-(const Vector3& v){ return Vector3(x - v.x, y - v.y, z - v.z); }
+Vector3 Vector3::operator+(const Vector3& v) { return Vector3(x + v.x, y + v.y, z + v.z); }
+void Vector3::operator+=(const Vector3& v) { x = x + v.x; y = y + v.y; z = z + v.z; }
+void Vector3::operator-=(const Vector3& v) { x = x - v.x; y = y - v.y; z = z - v.z; }
 Vector3 Vector3::operator/(const float& d){ return Vector3(x / d, y / d, z / d); }
 Vector3 Vector3::operator/(const Vector3& v) { return Vector3(x / v.x, y / v.y, z / v.z); }
 bool	Vector3::operator==(const Vector3& v){ return (x == v.x) && (y == v.y) && (z == v.z); }
@@ -217,16 +220,16 @@ Vector3 operator*(const Vector3& l, const Vector3& r)
 
 Vector3 Vector3::operator*(const Matrix& m)
 {
-	return Vector3(x * m.m11 + y * m.m21 + z * m.m31 + m.m41,
-		x * m.m12 + y * m.m22 + z * m.m32 + m.m42,
-		x * m.m13 + y * m.m23 + z * m.m33 + m.m43);
+	return Vector3(x * m.row[0].x + y * m.row[1].x + z * m.row[2].x + m.row[3].x,
+		x * m.row[0].y + y * m.row[1].y + z * m.row[2].y + m.row[3].y,
+		x * m.row[0].z + y * m.row[1].z + z * m.row[2].z + m.row[3].z);
 }
 
 Vector3 operator*(const Vector3& l, const Matrix& r)
 {
-	return Vector3(l.x * r.m11 + l.y * r.m21 + l.z * r.m31,
-		l.x * r.m12 + l.y * r.m22 + l.z * r.m32,
-		l.x * r.m13 + l.y * r.m23 + l.z * r.m33);
+	return Vector3(l.x * r.row[0].x + l.y * r.row[1].x + l.z * r.row[2].x,
+		l.x * r.row[0].y + l.y * r.row[1].y + l.z * r.row[2].y,
+		l.x * r.row[0].z + l.y * r.row[1].z + l.z * r.row[2].z);
 }
 
 Vector4 operator+(const Vector4& l, const Vector4& r)
@@ -242,19 +245,19 @@ Vector4 operator*(const Vector4& l, const Vector4& r)
 Vector4 Vector4::operator*(const Matrix& m)
 {
 	return Vector4(
-		x * m.m11 + y * m.m21 + z * m.m31 + w * m.m41,
-		x * m.m12 + y * m.m22 + z * m.m32 + w * m.m42,
-		x * m.m13 + y * m.m23 + z * m.m33 + w * m.m43,
-		x * m.m14 + y * m.m24 + z * m.m34 + w * m.m44);
+		x * m.row[0].x + y * m.row[1].x + z * m.row[2].x + w * m.row[3].x,
+		x * m.row[0].y + y * m.row[1].y + z * m.row[2].y + w * m.row[3].y,
+		x * m.row[0].z + y * m.row[1].z + z * m.row[2].z + w * m.row[3].z,
+		x * m.row[0].w + y * m.row[1].w + z * m.row[2].w + w * m.row[3].w);
 }
 
 Vector4 operator*(const Vector4& l, const Matrix& r)
 {
 	return Vector4(
-		l.x * r.m11 + l.y * r.m21 + l.z * r.m31 + l.w * r.m41,
-		l.x * r.m12 + l.y * r.m22 + l.z * r.m32 + l.w * r.m42,
-		l.x * r.m13 + l.y * r.m23 + l.z * r.m33 + l.w * r.m43,
-		l.x * r.m14 + l.y * r.m24 + l.z * r.m34 + l.w * r.m44);
+		l.x * r.row[0].x + l.y * r.row[1].x + l.z * r.row[2].x + l.w * r.row[3].x,
+		l.x * r.row[0].y + l.y * r.row[1].y + l.z * r.row[2].y + l.w * r.row[3].y,
+		l.x * r.row[0].z + l.y * r.row[1].z + l.z * r.row[2].z + l.w * r.row[3].z,
+		l.x * r.row[0].w + l.y * r.row[1].w + l.z * r.row[2].w + l.w * r.row[3].w);
 }
 
 NS_MATH_END

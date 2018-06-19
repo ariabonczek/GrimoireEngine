@@ -118,9 +118,8 @@ namespace gfx
 		int m_numSurfaces;
 		int m_numBuffers;
 
-		grimJson::JsonValue m_renderSettings;
-
 #if _DEBUG
+		grimJson::JsonValue m_renderSettings;
 		SurfaceDefinition m_surfaceDefinitions[kMaxSurfaces];
 		BufferDefinition m_bufferDefinitions[kMaxSurfaces];
 #endif

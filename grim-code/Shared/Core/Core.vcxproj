@@ -142,6 +142,8 @@
     <ClInclude Include="Assert.h" />
     <ClInclude Include="grimJson.h" />
     <ClInclude Include="grimLmdb.h" />
+    <ClInclude Include="SizeAlign.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Uuid.h" />
   </ItemGroup>
   <ItemGroup>
@@ -160,6 +162,7 @@
     <ClCompile Include="Assert.cpp" />
     <ClCompile Include="grimJson.cpp" />
     <ClCompile Include="grimLmdb.cpp" />
+    <ClCompile Include="Timer.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
