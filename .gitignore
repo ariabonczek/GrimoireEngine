@@ -31,28 +31,67 @@
 *.out
 *.app
 
-# Custom
-*.tmp
-generated_*
-grim-data/*
-grim-sourcedata/*
-.vs/*
-*.ipch
-*.db-wal
-*.db-shm
-*.db
-*.suo
-*.tlog
-*.log
+bin\*
+obj\*
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Files built by Visual Studio
 *_i.c
 *_p.c
-*_i.h
+*_h.h
 *.ilk
 *.meta
+*.obj
 *.iobj
 *.pch
 *.pdb
 *.ipdb
-*.enc
-*.idb
-*.opendb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Custom
+generated_*
+grim-data/*
+grim-sourcedata/*
+*.pyc
+Debug/*
+Release/*
