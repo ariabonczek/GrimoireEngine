@@ -1,41 +1,6 @@
 {
 	"types":[
 		{
-			"name":"ColorRGBA",
-			"typeSpecifier": "struct",
-			"namespace": "",
-			"serializeable": true,
-			"attributes": [
-				{ "name": "r", "type": "float", "default": 0.0 },
-				{ "name": "g", "type": "float", "default": 0.0 },
-				{ "name": "b", "type": "float", "default": 0.0 },
-				{ "name": "a", "type": "float", "default": 1.0 }
-			]
-		},
-		{
-			"name":"Transform",
-			"typeSpecifier": "class",
-			"namespace": "gd",
-			"serializeable": true,
-			"attributes": [
-				{ "name": "position",  "type": "Vector3" },
-				{ "name": "rotation",  "type": "Vector3" },
-				{ "name": "scale", 	   "type": "Vector3" }
-			]
-		},
-		{
-			"name":"Model",
-			"typeSpecifier": "class",
-			"namespace": "gd",
-			"serializeable": true,
-			"headers": [
-				"generated_Transform.h"
-			],
-			"attributes": [
-				{ "name": "transform",  "type": "gd::tTransform" }
-			]
-		},
-		{
 			"name":"Light",
 			"typeSpecifier": "class",
 			"namespace": "gd",

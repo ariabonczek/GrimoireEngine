@@ -15,8 +15,6 @@
 #include <Shared/Core/grimJson.h>
 #include <Shared/Core/Timer.h>
 
-#include <Tools/GrimoireBuild/Grimoire.h>
-
 // TEMP AHH
 #include <Engine/d3dx12.h>
 #include <Engine/DXGfx.h>
@@ -35,18 +33,10 @@ static gfx::Buffer s_viewBuffer;
 static gfx::Buffer s_lightBuffer;
 static gfx::GraphicsState m_graphicsState;
 static gfx::ResourceState m_resourceState;
-static grim::Grimoire* s_grimoire;
 gfx::View s_view;
 static gfx::RenderView s_renderView;
 gfx::DrawElement* s_drawElements;
 static gfx::RenderPass s_passDef;
-
-struct LightBuffer
-{
-	gd::tLight lights[10];
-	uint32_t numLights;
-};
-static LightBuffer s_allLights;
 
 #include <d3dcompiler.h>
 
@@ -190,23 +180,6 @@ static void Init()
 
 	gfx::BufferDefinition viewBufferDef{ "View Buffer", &s_renderView, { sizeof(gfx::RenderView), 0 }, gfx::kConstantBuffer, sizeof(gfx::RenderView) };
 	gfx::CreateBuffer(viewBufferDef, s_viewBuffer);
-
-	// lightBuffer
-	memset(&s_allLights, 0, sizeof(LightBuffer));
-	s_allLights.numLights = 1;
-
-	gd::tLight light;
-	light.color.r = 1.0f;
-	light.color.g = 0.0f;
-	light.color.b = 0.0f;
-	light.color.a = 1.0f;
-	light.direction = Vector3(0.0f, -1.0f, 0.0f);
-	light.intensity = 1.0f;
-	light.type = gd::tLight::eLightType::kDirectional;
-	light.size = 1.0f;
-
-	gfx::BufferDefinition lightBufferDef{ "Light Buffer", &s_allLights,{ sizeof(LightBuffer), 0 }, gfx::kConstantBuffer, sizeof(LightBuffer) };
-	gfx::CreateBuffer(lightBufferDef, s_lightBuffer);
 
 	gfx::RasterizerState rs = { gfx::kSolid, gfx::kBack, false };
 	gfx::BlendState bs = { false, gfx::kOne, gfx::kZero, gfx::kAdd, gfx::kOne, gfx::kZero, gfx::kAdd };

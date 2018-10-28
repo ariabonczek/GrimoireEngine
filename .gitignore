@@ -90,10 +90,11 @@ ipch/
 
 # Custom
 generated_*
-Generated/*
 grim-data/*
 grim-sourcedata/*
 *.pyc
 Debug/*
 Release/*
+obj/*
+.vs/*
 *.lmdb

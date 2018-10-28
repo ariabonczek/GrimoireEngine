@@ -21,7 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{52B7C8A3-8AE8-4A92-BBE2-19609E93D7A3}</ProjectGuid>
     <RootNamespace>Project1</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -69,7 +69,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformTarget)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
     <TargetExt>.lib</TargetExt>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
@@ -77,7 +77,7 @@
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;$(SolutionDir)lib\;$(SolutionDir)lib\$(Configuration)\;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(PlatformName)\$(Configuration)\</IntDir>
+    <IntDir>$(ProjectDir)obj\$(PlatformTarget)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
     <TargetExt>.lib</TargetExt>
     <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>

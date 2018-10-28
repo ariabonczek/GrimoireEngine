@@ -1,21 +1,2 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <ClInclude Include="generated_Vector3.h" />
-    <ClInclude Include="generated_Quaternion.h" />
-    <ClInclude Include="generated_Transform.h" />
-    <ClInclude Include="generated_Model.h" />
-    <ClInclude Include="generated_ColorRGBA.h" />
-    <ClInclude Include="generated_Light.h" />
-    <ClInclude Include="generated_Vector2.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="generated_Vector3.cpp" />
-    <ClCompile Include="generated_Quaternion.cpp" />
-    <ClCompile Include="generated_Transform.cpp" />
-    <ClCompile Include="generated_Model.cpp" />
-    <ClCompile Include="generated_ColorRGBA.cpp" />
-    <ClCompile Include="generated_Light.cpp" />
-    <ClCompile Include="generated_Vector2.cpp" />
-  </ItemGroup>
-</Project>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" />
